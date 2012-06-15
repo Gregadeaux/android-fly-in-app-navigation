@@ -1,0 +1,8 @@
+<resources>
+
+    <declare-styleable name="FanView">
+        <attr name="mainView" format="reference" />
+        <attr name="fanView" format="reference" />
+    </declare-styleable>
+
+</resources>
