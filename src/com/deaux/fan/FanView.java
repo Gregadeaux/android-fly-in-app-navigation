@@ -3,11 +3,8 @@ package com.deaux.fan;
 import com.gregadeaux.fan.R;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -25,7 +22,6 @@ public class FanView extends RelativeLayout {
 	
 	public FanView(Context context) {
 		this(context, null);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public FanView(Context context, AttributeSet attrs){
@@ -42,17 +38,12 @@ public class FanView extends RelativeLayout {
 		mMainView = (LinearLayout) findViewById(R.id.appView);
 		mFanView = (LinearLayout) findViewById(R.id.fanView);
 
-		if(main != -1 && fan != -1) {
-			ViewGroup parent = (ViewGroup) findViewById(R.id.layout);
-			
-			System.out.println("HERE I AM");
+		if(main != -1 && fan != -1) {			
 			LayoutInflater inflater = LayoutInflater.from(getContext());
 			
 			inflater.inflate(main, mMainView);
 			inflater.inflate(fan, mFanView);
 			
-			//mMainView.setVisibility(VISIBLE);
-			//mFanView.setVisibility(INVISIBLE);
 			initAnimations(context);
 		}
 	}
@@ -100,7 +91,6 @@ public class FanView extends RelativeLayout {
 			mFanView.setVisibility(VISIBLE);
 			
 			//mMainView.startAnimation(openAnimation);
-			//mMainView.
 		}else {
 			mFanView.setVisibility(GONE);
 			//mMainView.startAnimation(closeAnimation);
