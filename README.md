@@ -1,4 +1,4 @@
 android-fly-in-app-navigation
 =============================
 
-Fly In App Navigation like the one seen in Facebook, Evernote, and Prixing
+This project serves as a way to implement the fly-in app navigation seen in apps like Facebook, Evernote, and Prixing.
