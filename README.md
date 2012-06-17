@@ -9,7 +9,7 @@ You even define what elements will trigger the navigation to pop up. A simple ca
 
 Simple Example
 =============================
-'''java
+```java
 public class SampleActivity extends Activity {
   /** Called when the activity is first created. */
 	private FanView fan;
@@ -33,4 +33,4 @@ public class SampleActivity extends Activity {
     }
     
 }
-'''
+````
