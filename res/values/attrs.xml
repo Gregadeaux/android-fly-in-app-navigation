@@ -1,8 +1,7 @@
 <resources>
 
     <declare-styleable name="FanView">
-        <attr name="mainView" format="reference" />
-        <attr name="fanView" format="reference" />
+        <attr name="menuSize" format="int" />
     </declare-styleable>
 
 </resources>

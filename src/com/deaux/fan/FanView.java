@@ -3,14 +3,13 @@ package com.deaux.fan;
 import com.gregadeaux.fan.R;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.WindowManager;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.TranslateAnimation;
+import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -18,9 +17,8 @@ public class FanView extends RelativeLayout {
 
 	private LinearLayout mMainView;
 	private LinearLayout mFanView;
-	private Context context;
-	private TranslateAnimation openAnimation;
-	private TranslateAnimation closeAnimation;
+	private FanAnimation openAnimation;
+	private FanAnimation closeAnimation;
 	
 	public FanView(Context context) {
 		this(context, null);
@@ -32,7 +30,6 @@ public class FanView extends RelativeLayout {
 	
 	public FanView(Context context, AttributeSet attrs, int defStyle){
 		super(context, attrs, defStyle);
-		this.context = context;
 		LayoutInflater.from(getContext()).inflate(R.layout.fan_view, this, true);
 	}
 	
@@ -45,55 +42,59 @@ public class FanView extends RelativeLayout {
 			
 			inflater.inflate(main, mMainView);
 			inflater.inflate(fan, mFanView);
-			
-			initAnimations(context);
 		}
 	}
 	
-	private void initAnimations(Context context) {
-		Resources r = getResources();
-		int width = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
-		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, r.getDisplayMetrics());
-		int offset = (int) (width - px);
-		
-		openAnimation = new TranslateAnimation(
-				TranslateAnimation.ABSOLUTE, 0,
-				TranslateAnimation.ABSOLUTE, offset,
-				TranslateAnimation.ABSOLUTE, 0,
-				TranslateAnimation.ABSOLUTE, 0
-				);
-
-		openAnimation.setDuration(1000);
-		//openAnimation.setFillAfter(true);
-		
-		closeAnimation = new TranslateAnimation(
-				TranslateAnimation.ABSOLUTE, 0,
-				TranslateAnimation.ABSOLUTE, -offset,
-				TranslateAnimation.ABSOLUTE, 0,
-				TranslateAnimation.ABSOLUTE, 0
-				);
-
-		closeAnimation.setDuration(250);
-		closeAnimation.setAnimationListener(new AnimationListener() {
-
-			public void onAnimationStart(Animation animation) {}
-
-			public void onAnimationRepeat(Animation animation) {}
-
-			public void onAnimationEnd(Animation animation) {
-				mFanView.setVisibility(GONE);
-			}
-		});
-	}
-	
 	public void showMenu() {
+		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
+		
 		if(mFanView.getVisibility() == GONE) {
 			mFanView.setVisibility(VISIBLE);
+			openAnimation = new FanAnimation(0,px,1000,mMainView);
+			openAnimation.setFillAfter(true);
 			
-			//mMainView.startAnimation(openAnimation);
+			mMainView.startAnimation(openAnimation);
 		}else {
-			//mFanView.setVisibility(GONE);
+			closeAnimation = new FanAnimation(px,0,1000,mMainView);
+			closeAnimation.setFillAfter(true);
+			closeAnimation.setAnimationListener(new AnimationListener() {
+
+				public void onAnimationStart(Animation animation) {}
+
+				public void onAnimationRepeat(Animation animation) {}
+
+				public void onAnimationEnd(Animation animation) {
+					mFanView.setVisibility(GONE);
+				}
+			});
 			mMainView.startAnimation(closeAnimation);
+		}
+	}
+	
+	private class FanAnimation extends Animation {
+		private View mView;
+
+        private LayoutParams mLayoutParams;
+
+        private float startX, endX;
+
+        public FanAnimation(float fromX, float toX, int duration, View view) {
+            setDuration(duration);
+            mView = view;
+            endX = toX;
+            startX = fromX;
+            mLayoutParams = (LayoutParams) mView.getLayoutParams();
+        }
+		
+		@Override
+		protected void applyTransformation(float interpolatedTime, Transformation t) {
+		    super.applyTransformation(interpolatedTime, t);
+
+		    if (interpolatedTime < 1.0f) {
+		    	// Applies a Smooth Transition that starts fast but ends slowly
+		    	mLayoutParams.leftMargin = (int) ( startX + ((endX - startX) * (Math.pow(interpolatedTime - 1, 5)+1)));
+		    	mView.requestLayout();
+		    }
 		}
 	}
 

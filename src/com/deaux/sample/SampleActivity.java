@@ -20,10 +20,12 @@ public class SampleActivity extends Activity {
     }
     
     public void unclick(View v) {
+    	System.out.println("CLOSE");
     	fan.showMenu();
     }
     
     public void click(View v) {
+    	System.out.println("OPEN");
     	fan.showMenu();
     }
     

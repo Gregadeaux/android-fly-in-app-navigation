@@ -4,23 +4,24 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:id="@+id/layout" >
-
+  
     <LinearLayout 
         android:id="@+id/fanView"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:visibility="gone"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone"/>
+        android:layout_alignParentBottom="true"/>
+    
     <LinearLayout 
         android:id="@+id/appView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+    	android:background="#FFF"
         android:layout_alignParentTop="true"
-		android:layout_toRightOf="@id/fanView"
+		android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-    	android:background="#FFF"/>
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
