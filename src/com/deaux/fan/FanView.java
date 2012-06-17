@@ -86,11 +86,11 @@ public class FanView extends RelativeLayout {
 		});
 	}
 	
-	public void showMenu(boolean show) {
-		if(show) {
+	public void showMenu() {
+		if(mFanView.getVisibility() == GONE) {
 			mFanView.setVisibility(VISIBLE);
 			
-			mMainView.startAnimation(openAnimation);
+			//mMainView.startAnimation(openAnimation);
 		}else {
 			//mFanView.setVisibility(GONE);
 			mMainView.startAnimation(closeAnimation);
