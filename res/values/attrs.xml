@@ -1,7 +1,0 @@
-<resources>
-
-    <declare-styleable name="FanView">
-        <attr name="menuSize" format="int" />
-    </declare-styleable>
-
-</resources>
