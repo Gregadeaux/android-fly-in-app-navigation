@@ -3,7 +3,9 @@ package com.deaux.fan;
 import com.gregadeaux.fan.R;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -49,8 +51,10 @@ public class FanView extends RelativeLayout {
 	}
 	
 	private void initAnimations(Context context) {
+		Resources r = getResources();
 		int width = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
-		int offset = (width - 200);
+		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, r.getDisplayMetrics());
+		int offset = (int) (width - px);
 		
 		openAnimation = new TranslateAnimation(
 				TranslateAnimation.ABSOLUTE, 0,
@@ -59,8 +63,8 @@ public class FanView extends RelativeLayout {
 				TranslateAnimation.ABSOLUTE, 0
 				);
 
-		openAnimation.setDuration(250);
-		openAnimation.setFillAfter(true);
+		openAnimation.setDuration(1000);
+		//openAnimation.setFillAfter(true);
 		
 		closeAnimation = new TranslateAnimation(
 				TranslateAnimation.ABSOLUTE, 0,
@@ -70,16 +74,12 @@ public class FanView extends RelativeLayout {
 				);
 
 		closeAnimation.setDuration(250);
-		closeAnimation.setFillAfter(true);
 		closeAnimation.setAnimationListener(new AnimationListener() {
 
-			@Override
 			public void onAnimationStart(Animation animation) {}
 
-			@Override
 			public void onAnimationRepeat(Animation animation) {}
 
-			@Override
 			public void onAnimationEnd(Animation animation) {
 				mFanView.setVisibility(GONE);
 			}
@@ -90,10 +90,10 @@ public class FanView extends RelativeLayout {
 		if(show) {
 			mFanView.setVisibility(VISIBLE);
 			
-			//mMainView.startAnimation(openAnimation);
+			mMainView.startAnimation(openAnimation);
 		}else {
-			mFanView.setVisibility(GONE);
-			//mMainView.startAnimation(closeAnimation);
+			//mFanView.setVisibility(GONE);
+			mMainView.startAnimation(closeAnimation);
 		}
 	}
 
