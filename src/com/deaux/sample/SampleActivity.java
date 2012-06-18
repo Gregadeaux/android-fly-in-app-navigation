@@ -1,7 +1,7 @@
 package com.deaux.sample;
 
 import com.deaux.fan.FanView;
-import com.gregadeaux.fan.R;
+import com.deaux.fan.R;
 
 import android.app.Activity;
 import android.os.Bundle;

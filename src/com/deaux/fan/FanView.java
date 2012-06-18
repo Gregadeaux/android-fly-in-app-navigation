@@ -1,8 +1,7 @@
 package com.deaux.fan;
 
-import com.gregadeaux.fan.R;
-
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -17,6 +16,8 @@ public class FanView extends RelativeLayout {
 
 	private LinearLayout mMainView;
 	private LinearLayout mFanView;
+	private float px;
+	private AttributeSet attrs;
 	private FanAnimation openAnimation;
 	private FanAnimation closeAnimation;
 	
@@ -30,7 +31,10 @@ public class FanView extends RelativeLayout {
 	
 	public FanView(Context context, AttributeSet attrs, int defStyle){
 		super(context, attrs, defStyle);
-		LayoutInflater.from(getContext()).inflate(R.layout.fan_view, this, true);
+		this.attrs = attrs;
+		LayoutInflater.from(context).inflate(R.layout.fan_view, this, true);
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FanView);
+		px = a.getDimension(R.styleable.FanView_menuSize, 200);
 	}
 	
 	public void setViews(int main, int fan) {
@@ -45,9 +49,7 @@ public class FanView extends RelativeLayout {
 		}
 	}
 	
-	public void showMenu() {
-		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
-		
+	public void showMenu() {		
 		if(mFanView.getVisibility() == GONE) {
 			mFanView.setVisibility(VISIBLE);
 			openAnimation = new FanAnimation(0,px,1000,mMainView);
