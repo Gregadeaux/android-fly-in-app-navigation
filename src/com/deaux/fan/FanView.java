@@ -3,7 +3,6 @@ package com.deaux.fan;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,7 +16,6 @@ public class FanView extends RelativeLayout {
 	private LinearLayout mMainView;
 	private LinearLayout mFanView;
 	private float px;
-	private AttributeSet attrs;
 	private FanAnimation openAnimation;
 	private FanAnimation closeAnimation;
 	
@@ -31,7 +29,6 @@ public class FanView extends RelativeLayout {
 	
 	public FanView(Context context, AttributeSet attrs, int defStyle){
 		super(context, attrs, defStyle);
-		this.attrs = attrs;
 		LayoutInflater.from(context).inflate(R.layout.fan_view, this, true);
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FanView);
 		px = a.getDimension(R.styleable.FanView_menuSize, 200);
