@@ -16,6 +16,7 @@ public class FanView extends RelativeLayout {
 	private LinearLayout mMainView;
 	private LinearLayout mFanView;
 	private float px;
+	private int width;
 	private FanAnimation openAnimation;
 	private FanAnimation closeAnimation;
 	
@@ -29,8 +30,10 @@ public class FanView extends RelativeLayout {
 	
 	public FanView(Context context, AttributeSet attrs, int defStyle){
 		super(context, attrs, defStyle);
+		
 		LayoutInflater.from(context).inflate(R.layout.fan_view, this, true);
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FanView);
+		
 		px = a.getDimension(R.styleable.FanView_menuSize, 200);
 	}
 	
@@ -46,7 +49,8 @@ public class FanView extends RelativeLayout {
 		}
 	}
 	
-	public void showMenu() {		
+	public void showMenu() {
+		width = mMainView.getWidth();
 		if(mFanView.getVisibility() == GONE) {
 			mFanView.setVisibility(VISIBLE);
 			openAnimation = new FanAnimation(0,px,1000,mMainView);
@@ -92,6 +96,7 @@ public class FanView extends RelativeLayout {
 		    if (interpolatedTime < 1.0f) {
 		    	// Applies a Smooth Transition that starts fast but ends slowly
 		    	mLayoutParams.leftMargin = (int) ( startX + ((endX - startX) * (Math.pow(interpolatedTime - 1, 5)+1)));
+		    	mLayoutParams.rightMargin = -mLayoutParams.leftMargin;
 		    	mView.requestLayout();
 		    }
 		}
