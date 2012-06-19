@@ -7,6 +7,16 @@ Adding this project to your list of libraries will give you access to a new clas
 
 You even define what elements will trigger the navigation to pop up. A simple call to FanView.showMenu() will toggle the display to pop up or close.
 
+Features
+=============================
+* Open and Closing Animations on the Main View
+* Small Open and Closing Animations on the menu to add some reality to it
+* Dropshadow on the Main View to make it appear to be over the menu
+* Smooth animation transitions for a professional, quality animation
+* Empty layouts that allow you to completely design the menu
+* Simple usage
+* Easy injection into your existing projects
+
 Simple Example
 =============================
 ```java
