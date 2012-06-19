@@ -3,6 +3,7 @@ package com.deaux.fan;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -53,12 +54,12 @@ public class FanView extends RelativeLayout {
 		width = mMainView.getWidth();
 		if(mFanView.getVisibility() == GONE) {
 			mFanView.setVisibility(VISIBLE);
-			openAnimation = new FanAnimation(0,px,1000,mMainView);
+			openAnimation = new FanAnimation(0, px,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), 0, 1000);
 			openAnimation.setFillAfter(true);
 			
 			mMainView.startAnimation(openAnimation);
 		}else {
-			closeAnimation = new FanAnimation(px,0,1000,mMainView);
+			closeAnimation = new FanAnimation(px, 0, 0, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), 1000);
 			closeAnimation.setFillAfter(true);
 			closeAnimation.setAnimationListener(new AnimationListener() {
 
@@ -77,16 +78,20 @@ public class FanView extends RelativeLayout {
 	private class FanAnimation extends Animation {
 		private View mView;
 
-        private LayoutParams mLayoutParams;
+        private LayoutParams mainLayoutParams, fanLayoutParams;
 
-        private float startX, endX;
+        private float mainStartX, mainEndX;
+        private float fanStartX, fanEndX;
 
-        public FanAnimation(float fromX, float toX, int duration, View view) {
+        public FanAnimation(float fromX, float toX, float fanFromX, float fanToX, int duration) {
             setDuration(duration);
-            mView = view;
-            endX = toX;
-            startX = fromX;
-            mLayoutParams = (LayoutParams) mView.getLayoutParams();
+            mainEndX = toX;
+            mainStartX = fromX;
+            mainLayoutParams = (LayoutParams) mMainView.getLayoutParams();
+            
+            fanStartX = fanFromX;
+            fanEndX = fanToX;
+            fanLayoutParams = (LayoutParams) mFanView.getLayoutParams();
         }
 		
 		@Override
@@ -95,9 +100,11 @@ public class FanView extends RelativeLayout {
 
 		    if (interpolatedTime < 1.0f) {
 		    	// Applies a Smooth Transition that starts fast but ends slowly
-		    	mLayoutParams.leftMargin = (int) ( startX + ((endX - startX) * (Math.pow(interpolatedTime - 1, 5)+1)));
-		    	mLayoutParams.rightMargin = -mLayoutParams.leftMargin;
-		    	mView.requestLayout();
+		    	mainLayoutParams.leftMargin = (int) ( mainStartX + ((mainEndX - mainStartX) * (Math.pow(interpolatedTime - 1, 5)+1)));
+		    	fanLayoutParams.leftMargin = (int) ( fanStartX + ((fanEndX - fanStartX) * (Math.pow(interpolatedTime - 1, 5)+1)));
+		    	mainLayoutParams.rightMargin = -mainLayoutParams.leftMargin;
+		    	mMainView.requestLayout();
+		    	mFanView.requestLayout();
 		    }
 		}
 	}
