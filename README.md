@@ -47,7 +47,19 @@ public class SampleActivity extends Activity {
     }
     
 }
-````
+```
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<com.deaux.fan.FanView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.deaux.fansample"
+    android:id="@+id/fan_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    app:menuSize="200dp" />
+```
 
 License
 =============================
