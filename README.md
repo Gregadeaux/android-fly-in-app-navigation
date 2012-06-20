@@ -25,6 +25,7 @@ Features
 
 Simple Example
 =============================
+See this article for a more detailed explanation. http://mobiledesignpatterns.blogspot.com/2012/06/introducing-android-fly-in-app.html
 ```java
 public class SampleActivity extends Activity {
   /** Called when the activity is first created. */
