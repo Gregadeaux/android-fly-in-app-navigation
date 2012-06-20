@@ -21,6 +21,8 @@ Features
 * Simple usage
 * Easy injection into your existing projects
 
+![Example Image][1]![Example Image][2]
+
 Simple Example
 =============================
 ```java
@@ -70,3 +72,6 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+[1]: http://1.bp.blogspot.com/-Anfjp-75ehs/T-EUzshFcBI/AAAAAAAAArY/okzM1yam0bY/s1600/device-2012-06-19-185656.png
+[2]: http://4.bp.blogspot.com/-KiDXDp9khGM/T-EU1FTDpSI/AAAAAAAAArg/TVjTl5rAPCI/s1600/device-2012-06-19-185703.png
