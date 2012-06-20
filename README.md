@@ -1,3 +1,7 @@
+Note
+=============================
+If you use this library, please let me know at Gregadeaux@gmail.com so I can see it in action. I will also feature you in this readme so others can see it.
+
 android-fly-in-app-navigation
 =============================
 
