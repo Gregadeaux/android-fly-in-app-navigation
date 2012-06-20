@@ -48,7 +48,7 @@ public class SampleActivity extends Activity {
     
 }
 ```
-
+test.xml
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <com.deaux.fan.FanView 
