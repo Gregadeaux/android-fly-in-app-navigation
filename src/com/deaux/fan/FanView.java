@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.Transformation;
@@ -16,10 +17,11 @@ public class FanView extends RelativeLayout {
 
 	private LinearLayout mMainView;
 	private LinearLayout mFanView;
+	private View mTintView;
 	private float px;
-	private int width;
 	private FanAnimation openAnimation;
 	private FanAnimation closeAnimation;
+	private Animation alphaAnimation;
 	
 	public FanView(Context context) {
 		this(context, null);
@@ -41,6 +43,7 @@ public class FanView extends RelativeLayout {
 	public void setViews(int main, int fan) {
 		mMainView = (LinearLayout) findViewById(R.id.appView);
 		mFanView = (LinearLayout) findViewById(R.id.fanView);
+		mTintView = findViewById(R.id.tintView);
 
 		if(main != -1 && fan != -1) {			
 			LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -51,12 +54,18 @@ public class FanView extends RelativeLayout {
 	}
 	
 	public void showMenu() {
-		width = mMainView.getWidth();
 		if(mFanView.getVisibility() == GONE) {
 			mFanView.setVisibility(VISIBLE);
+			mTintView.setVisibility(VISIBLE);
+			
+			alphaAnimation = new AlphaAnimation(0.8f, 0.0f);
+			alphaAnimation.setDuration(750);
+			alphaAnimation.setFillAfter(true);
+			
 			openAnimation = new FanAnimation(0, px,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), 0, 1000);
 			openAnimation.setFillAfter(true);
 			
+			mTintView.startAnimation(alphaAnimation);
 			mMainView.startAnimation(openAnimation);
 		}else {
 			closeAnimation = new FanAnimation(px, 0, 0, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), 1000);
@@ -69,15 +78,21 @@ public class FanView extends RelativeLayout {
 
 				public void onAnimationEnd(Animation animation) {
 					mFanView.setVisibility(GONE);
+					mTintView.setVisibility(GONE);
 				}
 			});
+			
+
+			alphaAnimation = new AlphaAnimation(0.0f, 0.8f);
+			alphaAnimation.setDuration(750);
+			alphaAnimation.setFillAfter(true);
+
+			mTintView.startAnimation(alphaAnimation);
 			mMainView.startAnimation(closeAnimation);
 		}
 	}
 	
 	private class FanAnimation extends Animation {
-		private View mView;
-
         private LayoutParams mainLayoutParams, fanLayoutParams;
 
         private float mainStartX, mainEndX;
@@ -103,6 +118,7 @@ public class FanView extends RelativeLayout {
 		    	mainLayoutParams.leftMargin = (int) ( mainStartX + ((mainEndX - mainStartX) * (Math.pow(interpolatedTime - 1, 5)+1)));
 		    	fanLayoutParams.leftMargin = (int) ( fanStartX + ((fanEndX - fanStartX) * (Math.pow(interpolatedTime - 1, 5)+1)));
 		    	mainLayoutParams.rightMargin = -mainLayoutParams.leftMargin;
+		    	
 		    	mMainView.requestLayout();
 		    	mFanView.requestLayout();
 		    }

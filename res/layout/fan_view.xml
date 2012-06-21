@@ -15,6 +15,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"/>
     
+    <View
+        android:id="@+id/tintView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#000000"
+        android:visibility="gone"/>
+    
+    
     <LinearLayout 
         android:id="@+id/appView"
         android:layout_width="fill_parent"
