@@ -37,7 +37,7 @@ public class FanView extends RelativeLayout {
 		LayoutInflater.from(context).inflate(R.layout.fan_view, this, true);
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FanView);
 		
-		px = a.getDimension(R.styleable.FanView_menuSize, 200);
+		px = a.getDimension(R.styleable.FanView_menuSize, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics()));
 	}
 	
 	public void setViews(int main, int fan) {
