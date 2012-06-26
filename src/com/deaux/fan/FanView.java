@@ -22,6 +22,8 @@ public class FanView extends RelativeLayout {
 	private FanAnimation openAnimation;
 	private FanAnimation closeAnimation;
 	private Animation alphaAnimation;
+	private int animDur;
+	private boolean fade;
 	
 	public FanView(Context context) {
 		this(context, null);
@@ -38,6 +40,8 @@ public class FanView extends RelativeLayout {
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FanView);
 		
 		px = a.getDimension(R.styleable.FanView_menuSize, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics()));
+		animDur = 1000;
+		fade = true;
 	}
 	
 	public void setViews(int main, int fan) {
@@ -53,22 +57,42 @@ public class FanView extends RelativeLayout {
 		}
 	}
 	
+	public void setAnimationDuration(int duration) {
+		animDur = duration;
+	}
+	
+	public void setFadeOnMenuToggle(boolean fade) {
+		this.fade = fade;
+	}
+	
+	public void setIncludeDropshadow(boolean include) {
+		if(include) {
+			findViewById(R.id.dropshadow).setVisibility(VISIBLE);
+		}else {
+			findViewById(R.id.dropshadow).setVisibility(GONE);
+		}
+	}
+	
 	public void showMenu() {
 		if(mFanView.getVisibility() == GONE) {
 			mFanView.setVisibility(VISIBLE);
 			mTintView.setVisibility(VISIBLE);
 			
-			alphaAnimation = new AlphaAnimation(0.8f, 0.0f);
-			alphaAnimation.setDuration(750);
-			alphaAnimation.setFillAfter(true);
-			
-			openAnimation = new FanAnimation(0, px,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), 0, 1000);
+			openAnimation = new FanAnimation(0, px,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), 0, animDur);
 			openAnimation.setFillAfter(true);
 			
-			mTintView.startAnimation(alphaAnimation);
+			if(fade) {
+				alphaAnimation = new AlphaAnimation(0.8f, 0.0f);
+				alphaAnimation.setDuration((int)0.75*animDur);
+				alphaAnimation.setFillAfter(true);
+				mTintView.startAnimation(alphaAnimation);
+			} else {
+				mTintView.setVisibility(GONE);
+			}
+			
 			mMainView.startAnimation(openAnimation);
 		}else {
-			closeAnimation = new FanAnimation(px, 0, 0, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), 1000);
+			closeAnimation = new FanAnimation(px, 0, 0, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), animDur);
 			closeAnimation.setFillAfter(true);
 			closeAnimation.setAnimationListener(new AnimationListener() {
 
@@ -82,12 +106,14 @@ public class FanView extends RelativeLayout {
 				}
 			});
 			
-
-			alphaAnimation = new AlphaAnimation(0.0f, 0.8f);
-			alphaAnimation.setDuration(750);
-			alphaAnimation.setFillAfter(true);
-
-			mTintView.startAnimation(alphaAnimation);
+			if(fade) {
+				alphaAnimation = new AlphaAnimation(0.0f, 0.8f);
+				alphaAnimation.setDuration(750);
+				alphaAnimation.setFillAfter(true);
+				mTintView.startAnimation(alphaAnimation);
+			} else {
+				mTintView.setVisibility(GONE);
+			}
 			mMainView.startAnimation(closeAnimation);
 		}
 	}

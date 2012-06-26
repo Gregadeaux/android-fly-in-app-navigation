@@ -34,6 +34,7 @@
         android:layout_alignParentBottom="true"/>
     
     <View
+        android:id="@+id/dropshadow"
         android:layout_width="5dp"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
