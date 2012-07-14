@@ -57,6 +57,10 @@ public class FanView extends RelativeLayout {
 		}
 	}
 	
+	public boolean isOpen() {
+		return mFanView.getVisibility() == VISIBLE;
+	}
+	
 	public void setAnimationDuration(int duration) {
 		animDur = duration;
 	}
