@@ -3,6 +3,7 @@ package com.deaux.fan;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,8 @@ public class FanView extends RelativeLayout {
 	private Animation alphaAnimation;
 	private int animDur;
 	private boolean fade;
+	
+	private boolean isClosing;
 	
 	public FanView(Context context) {
 		this(context, null);
@@ -58,7 +61,7 @@ public class FanView extends RelativeLayout {
 	}
 	
 	public boolean isOpen() {
-		return mFanView.getVisibility() == VISIBLE;
+		return mFanView.getVisibility() == VISIBLE && !isClosing;
 	}
 	
 	public void setAnimationDuration(int duration) {
@@ -78,7 +81,7 @@ public class FanView extends RelativeLayout {
 	}
 	
 	public void showMenu() {
-		if(mFanView.getVisibility() == GONE) {
+		if(mFanView.getVisibility() == GONE || isClosing) {
 			mFanView.setVisibility(VISIBLE);
 			mTintView.setVisibility(VISIBLE);
 			
@@ -95,7 +98,8 @@ public class FanView extends RelativeLayout {
 			}
 			
 			mMainView.startAnimation(openAnimation);
-		}else {
+			isClosing = false;
+		}else if(!isClosing && isOpen()){
 			closeAnimation = new FanAnimation(px, 0, 0, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), animDur);
 			closeAnimation.setFillAfter(true);
 			closeAnimation.setAnimationListener(new AnimationListener() {
@@ -107,6 +111,7 @@ public class FanView extends RelativeLayout {
 				public void onAnimationEnd(Animation animation) {
 					mFanView.setVisibility(GONE);
 					mTintView.setVisibility(GONE);
+					isClosing = false;
 				}
 			});
 			
@@ -119,6 +124,7 @@ public class FanView extends RelativeLayout {
 				mTintView.setVisibility(GONE);
 			}
 			mMainView.startAnimation(closeAnimation);
+			isClosing = true;
 		}
 	}
 	
