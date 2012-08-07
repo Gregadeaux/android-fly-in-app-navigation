@@ -64,6 +64,38 @@ test.xml
     app:menuSize="200dp" />
 ```
 
+Example using Fragments
+=============================
+This project now supports using Fragments (support library fragments) instead of specifying layouts
+```java
+public class SampleFragmentActivity extends FragmentActivity {
+  /** Called when the activity is first created. */
+	private FanView fan;
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.test);
+        fan = (FanView) findViewById(R.id.fan_view);
+        Fragment fanFrag = new MyFanFragment();
+        Fragment contentFrag = new MyContentFragment();
+        fan.setFragments(contentFrag, fanFrag);
+    }
+    
+    public void unclick(View v) {
+    	System.out.println("CLOSE");
+    	fan.showMenu();
+    }
+    
+    public void click(View v) {
+    	System.out.println("OPEN");
+    	fan.showMenu();
+    }
+    
+}
+```
+
+
 License
 =============================
 Copyright 2012 Greg Billetdeaux
