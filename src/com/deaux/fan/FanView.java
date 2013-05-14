@@ -103,6 +103,13 @@ public class FanView extends RelativeLayout {
 			findViewById(R.id.dropshadow).setVisibility(GONE);
 		}
 	}
+	
+	public void resetMargin() {
+		LayoutParams params;
+		params = (LayoutParams) mMainView.getLayoutParams();
+		params.leftMargin = 0;
+		params.rightMargin = 0;
+	}
 
 	public void showMenu() {
 		if (mFanView.getVisibility() == GONE || isClosing) {
