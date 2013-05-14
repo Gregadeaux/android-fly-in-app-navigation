@@ -18,6 +18,6 @@ assets/*
 .settings/*
 
 # Local configuration file (sdk path, etc)
-local.properties
-.classpath
+*.properties
+*.classpath
 *.dropbox
