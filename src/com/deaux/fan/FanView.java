@@ -1,5 +1,8 @@
 package com.deaux.fan;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.app.Fragment;
@@ -27,6 +30,7 @@ public class FanView extends RelativeLayout {
 	private Animation alphaAnimation;
 	private int animDur;
 	private boolean fade;
+	private List<FanViewListener> observers;
 
 	private boolean isClosing;
 
@@ -52,6 +56,25 @@ public class FanView extends RelativeLayout {
 		fade = true;
 		
 		a.recycle();
+	}
+	
+	public void addListener(FanViewListener l) {
+		if(observers == null) {
+			observers = new ArrayList<FanViewListener>();
+		}
+		observers.add(l);
+	}
+	
+	private void notifyOpen() {
+		for(FanViewListener l : observers) {
+			l.onFanViewOpen();
+		}
+	}
+	
+	private void notifyClose() {
+		for(FanViewListener l : observers) {
+			l.onFanViewClose();
+		}
 	}
 
 	public void setViews(int main, int fan) {
@@ -132,6 +155,7 @@ public class FanView extends RelativeLayout {
 
 			mMainView.startAnimation(openAnimation);
 			isClosing = false;
+			notifyOpen();
 		} else if (!isClosing && isOpen()) {
 			closeAnimation = new FanAnimation(px, 0, 0,
 					TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20,
@@ -162,6 +186,7 @@ public class FanView extends RelativeLayout {
 			}
 			mMainView.startAnimation(closeAnimation);
 			isClosing = true;
+			notifyClose();
 		}
 	}
 
