@@ -2,7 +2,6 @@ package com.deaux.fan;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -51,6 +50,8 @@ public class FanView extends RelativeLayout {
 						getResources().getDisplayMetrics()));
 		animDur = 1000;
 		fade = true;
+		
+		a.recycle();
 	}
 
 	public void setViews(int main, int fan) {
