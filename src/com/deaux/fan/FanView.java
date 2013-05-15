@@ -3,6 +3,8 @@ package com.deaux.fan;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.deaux.fan.Side;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v4.app.Fragment;
@@ -70,18 +72,18 @@ public class FanView extends RelativeLayout {
 		observers.add(l);
 	}
 	
-	private void notifyOpen() {
+	private void notifyOpen(Side side) {
 		if(observers != null) {
 			for(FanViewListener l : observers) {
-				l.onFanViewOpen();
+				l.onFanViewOpen(side);
 			}
 		}
 	}
 	
-	private void notifyClose() {
+	private void notifyClose(Side side) {
 		if(observers != null) {
 			for(FanViewListener l : observers) {
-				l.onFanViewClose();
+				l.onFanViewClose(side);
 			}
 		}
 	}
@@ -189,7 +191,7 @@ public class FanView extends RelativeLayout {
 
 			mMainView.startAnimation(openAnimation);
 			isLeftClosing = false;
-			notifyOpen();
+			notifyOpen(Side.LEFT);
 		} else if (!isRightOpen() && !isLeftClosing && isLeftOpen()) {
 			closeAnimation = new LeftFanAnimation(px, 0, 0,
 					TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20,
@@ -220,7 +222,7 @@ public class FanView extends RelativeLayout {
 			}
 			mMainView.startAnimation(closeAnimation);
 			isLeftClosing = true;
-			notifyClose();
+			notifyClose(Side.LEFT);
 		}
 	}
 	
@@ -245,7 +247,7 @@ public class FanView extends RelativeLayout {
 
 			mMainView.startAnimation(openAnimation);
 			isRightClosing = false;
-			notifyOpen();
+			notifyOpen(Side.RIGHT);
 		} else if (!isLeftOpen() && !isLeftClosing && isRightOpen()) {
 			closeAnimation = new RightFanAnimation(px, 0, 0,
 					TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20,
@@ -276,7 +278,7 @@ public class FanView extends RelativeLayout {
 			}
 			mMainView.startAnimation(closeAnimation);
 			isLeftClosing = true;
-			notifyClose();
+			notifyClose(Side.RIGHT);
 		}
 	}
 
