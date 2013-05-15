@@ -15,6 +15,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"/>
     
+    <LinearLayout
+        android:id="@+id/rightView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="-20dp"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
+    
     <View
         android:id="@+id/tintView"
         android:layout_width="fill_parent"
@@ -34,13 +44,23 @@
         android:layout_alignParentBottom="true"/>
     
     <View
-        android:id="@+id/dropshadow"
+        android:id="@+id/leftdropshadow"
         android:layout_width="5dp"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
     	android:layout_alignParentBottom="true"
     	android:layout_alignLeft="@id/appView"
     	android:layout_marginLeft="-5dip"
-    	android:background="@drawable/dropshadow"/>
+    	android:background="@drawable/leftdropshadow"/>
+    
+    <View
+        android:id="@+id/rightdropshadow"
+        android:layout_width="5dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+    	android:layout_alignParentBottom="true"
+    	android:layout_alignRight="@id/appView"
+    	android:layout_marginRight="-5dip"
+    	android:background="@drawable/rightdropshadow"/>
 
 </RelativeLayout>

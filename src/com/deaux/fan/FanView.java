@@ -22,17 +22,20 @@ import android.widget.RelativeLayout;
 public class FanView extends RelativeLayout {
 
 	private LinearLayout mMainView;
-	private LinearLayout mFanView;
+	private LinearLayout mLeftView;
+	private LinearLayout mRightView;
 	private View mTintView;
 	private float px;
-	private FanAnimation openAnimation;
-	private FanAnimation closeAnimation;
+	private Animation openAnimation;
+	private Animation closeAnimation;
 	private Animation alphaAnimation;
 	private int animDur;
 	private boolean fade;
 	private List<FanViewListener> observers;
+	private LayoutInflater inflater;
 
-	private boolean isClosing;
+	private boolean isLeftClosing;
+	private boolean isRightClosing;
 
 	public FanView(Context context) {
 		this(context, null);
@@ -56,6 +59,8 @@ public class FanView extends RelativeLayout {
 		fade = true;
 		
 		a.recycle();
+		
+		inflater = LayoutInflater.from(getContext());
 	}
 	
 	public void addListener(FanViewListener l) {
@@ -80,23 +85,42 @@ public class FanView extends RelativeLayout {
 			}
 		}
 	}
+	
+	public void setMainView(int main) {
+		mMainView = (LinearLayout) findViewById(R.id.appView);
+		mTintView = findViewById(R.id.tintView);
+		if(main != -1) {
+			inflater.inflate(main, mMainView);
+		}
+	}
+	
+	public void setLeftView(int left) {
+		mLeftView = (LinearLayout) findViewById(R.id.fanView);
+		if (left != -1) {
+			inflater.inflate(left, mLeftView);
+		}
+	}
+	
+	public void setRightView(int right) {
+		mRightView = (LinearLayout) findViewById(R.id.rightView);
+		if (right != -1) {
+			inflater.inflate(right, mRightView);
+		}
+	}
 
 	public void setViews(int main, int fan) {
 		mMainView = (LinearLayout) findViewById(R.id.appView);
-		mFanView = (LinearLayout) findViewById(R.id.fanView);
-		mTintView = findViewById(R.id.tintView);
+		mLeftView = (LinearLayout) findViewById(R.id.fanView);
 
 		if (main != -1 && fan != -1) {
-			LayoutInflater inflater = LayoutInflater.from(getContext());
-
 			inflater.inflate(main, mMainView);
-			inflater.inflate(fan, mFanView);
+			inflater.inflate(fan, mLeftView);
 		}
 	}
 
 	public void setFragments(Fragment main, Fragment fan) {
 		mMainView = (LinearLayout) findViewById(R.id.appView);
-		mFanView = (LinearLayout) findViewById(R.id.fanView);
+		mLeftView = (LinearLayout) findViewById(R.id.fanView);
 		mTintView = findViewById(R.id.tintView);
 
 		FragmentManager mgr = ((FragmentActivity) getContext())
@@ -111,8 +135,12 @@ public class FanView extends RelativeLayout {
 		mgr.beginTransaction().replace(R.id.appView, replacement).commit();
 	}
 
-	public boolean isOpen() {
-		return mFanView.getVisibility() == VISIBLE && !isClosing;
+	public boolean isLeftOpen() {
+		return !(mLeftView == null) && (mLeftView.getVisibility() == VISIBLE && !isLeftClosing);
+	}
+	
+	public boolean isRightOpen() {
+		return !(mRightView == null) && (mRightView.getVisibility() == VISIBLE && !isRightClosing);
 	}
 
 	public void setAnimationDuration(int duration) {
@@ -125,9 +153,11 @@ public class FanView extends RelativeLayout {
 
 	public void setIncludeDropshadow(boolean include) {
 		if (include) {
-			findViewById(R.id.dropshadow).setVisibility(VISIBLE);
+			findViewById(R.id.leftdropshadow).setVisibility(VISIBLE);
+			findViewById(R.id.rightdropshadow).setVisibility(VISIBLE);
 		} else {
-			findViewById(R.id.dropshadow).setVisibility(GONE);
+			findViewById(R.id.leftdropshadow).setVisibility(GONE);
+			findViewById(R.id.rightdropshadow).setVisibility(GONE);
 		}
 	}
 	
@@ -138,12 +168,12 @@ public class FanView extends RelativeLayout {
 		params.rightMargin = 0;
 	}
 
-	public void showMenu() {
-		if (mFanView.getVisibility() == GONE || isClosing) {
-			mFanView.setVisibility(VISIBLE);
+	public void showLeftMenu() {
+		if (!isRightOpen() && (mLeftView.getVisibility() == GONE || isLeftClosing)) {
+			mLeftView.setVisibility(VISIBLE);
 			mTintView.setVisibility(VISIBLE);
 
-			openAnimation = new FanAnimation(0, px, TypedValue.applyDimension(
+			openAnimation = new LeftFanAnimation(0, px, TypedValue.applyDimension(
 					TypedValue.COMPLEX_UNIT_DIP, -20, getResources()
 							.getDisplayMetrics()), 0, animDur);
 			openAnimation.setFillAfter(true);
@@ -158,10 +188,10 @@ public class FanView extends RelativeLayout {
 			}
 
 			mMainView.startAnimation(openAnimation);
-			isClosing = false;
+			isLeftClosing = false;
 			notifyOpen();
-		} else if (!isClosing && isOpen()) {
-			closeAnimation = new FanAnimation(px, 0, 0,
+		} else if (!isRightOpen() && !isLeftClosing && isLeftOpen()) {
+			closeAnimation = new LeftFanAnimation(px, 0, 0,
 					TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20,
 							getResources().getDisplayMetrics()), animDur);
 			closeAnimation.setFillAfter(true);
@@ -174,9 +204,9 @@ public class FanView extends RelativeLayout {
 				}
 
 				public void onAnimationEnd(Animation animation) {
-					mFanView.setVisibility(GONE);
+					mLeftView.setVisibility(GONE);
 					mTintView.setVisibility(GONE);
-					isClosing = false;
+					isLeftClosing = false;
 				}
 			});
 
@@ -189,18 +219,74 @@ public class FanView extends RelativeLayout {
 				mTintView.setVisibility(GONE);
 			}
 			mMainView.startAnimation(closeAnimation);
-			isClosing = true;
+			isLeftClosing = true;
+			notifyClose();
+		}
+	}
+	
+	public void showRightMenu() {
+		if (!isLeftOpen() && (mRightView.getVisibility() == GONE || isRightClosing)) {
+			mRightView.setVisibility(VISIBLE);
+			mTintView.setVisibility(VISIBLE);
+
+			openAnimation = new RightFanAnimation(0, px, TypedValue.applyDimension(
+					TypedValue.COMPLEX_UNIT_DIP, -20, getResources()
+							.getDisplayMetrics()), 0, animDur);
+			openAnimation.setFillAfter(true);
+
+			if (fade) {
+				alphaAnimation = new AlphaAnimation(0.8f, 0.0f);
+				alphaAnimation.setDuration((int) 0.75 * animDur);
+				alphaAnimation.setFillAfter(true);
+				mTintView.startAnimation(alphaAnimation);
+			} else {
+				mTintView.setVisibility(GONE);
+			}
+
+			mMainView.startAnimation(openAnimation);
+			isRightClosing = false;
+			notifyOpen();
+		} else if (!isLeftOpen() && !isLeftClosing && isRightOpen()) {
+			closeAnimation = new RightFanAnimation(px, 0, 0,
+					TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20,
+							getResources().getDisplayMetrics()), animDur);
+			closeAnimation.setFillAfter(true);
+			closeAnimation.setAnimationListener(new AnimationListener() {
+
+				public void onAnimationStart(Animation animation) {
+				}
+
+				public void onAnimationRepeat(Animation animation) {
+				}
+
+				public void onAnimationEnd(Animation animation) {
+					mRightView.setVisibility(GONE);
+					mTintView.setVisibility(GONE);
+					isLeftClosing = false;
+				}
+			});
+
+			if (fade) {
+				alphaAnimation = new AlphaAnimation(0.0f, 0.8f);
+				alphaAnimation.setDuration(750);
+				alphaAnimation.setFillAfter(true);
+				mTintView.startAnimation(alphaAnimation);
+			} else {
+				mTintView.setVisibility(GONE);
+			}
+			mMainView.startAnimation(closeAnimation);
+			isLeftClosing = true;
 			notifyClose();
 		}
 	}
 
-	private class FanAnimation extends Animation {
+	private class LeftFanAnimation extends Animation {
 		private LayoutParams mainLayoutParams, fanLayoutParams;
 
 		private float mainStartX, mainEndX;
 		private float fanStartX, fanEndX;
 
-		public FanAnimation(float fromX, float toX, float fanFromX,
+		public LeftFanAnimation(float fromX, float toX, float fanFromX,
 				float fanToX, int duration) {
 			setDuration(duration);
 			mainEndX = toX;
@@ -209,7 +295,7 @@ public class FanView extends RelativeLayout {
 
 			fanStartX = fanFromX;
 			fanEndX = fanToX;
-			fanLayoutParams = (LayoutParams) mFanView.getLayoutParams();
+			fanLayoutParams = (LayoutParams) mLeftView.getLayoutParams();
 		}
 
 		@Override
@@ -226,7 +312,44 @@ public class FanView extends RelativeLayout {
 				mainLayoutParams.rightMargin = -mainLayoutParams.leftMargin;
 
 				mMainView.requestLayout();
-				mFanView.requestLayout();
+				mLeftView.requestLayout();
+			}
+		}
+	}
+	
+	private class RightFanAnimation extends Animation {
+		private LayoutParams mainLayoutParams, fanLayoutParams;
+
+		private float mainStartX, mainEndX;
+		private float fanStartX, fanEndX;
+
+		public RightFanAnimation(float fromX, float toX, float fanFromX,
+				float fanToX, int duration) {
+			setDuration(duration);
+			mainEndX = toX;
+			mainStartX = fromX;
+			mainLayoutParams = (LayoutParams) mMainView.getLayoutParams();
+
+			fanStartX = fanFromX;
+			fanEndX = fanToX;
+			fanLayoutParams = (LayoutParams) mRightView.getLayoutParams();
+		}
+
+		@Override
+		protected void applyTransformation(float interpolatedTime,
+				Transformation t) {
+			super.applyTransformation(interpolatedTime, t);
+
+			if (interpolatedTime < 1.0f) {
+				// Applies a Smooth Transition that starts fast but ends slowly
+				mainLayoutParams.rightMargin = (int) (mainStartX + ((mainEndX - mainStartX) * (Math
+						.pow(interpolatedTime - 1, 5) + 1)));
+				fanLayoutParams.rightMargin = (int) (fanStartX + ((fanEndX - fanStartX) * (Math
+						.pow(interpolatedTime - 1, 5) + 1)));
+				mainLayoutParams.leftMargin = -mainLayoutParams.rightMargin;
+
+				mMainView.requestLayout();
+				mRightView.requestLayout();
 			}
 		}
 	}
