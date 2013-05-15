@@ -66,14 +66,18 @@ public class FanView extends RelativeLayout {
 	}
 	
 	private void notifyOpen() {
-		for(FanViewListener l : observers) {
-			l.onFanViewOpen();
+		if(observers != null) {
+			for(FanViewListener l : observers) {
+				l.onFanViewOpen();
+			}
 		}
 	}
 	
 	private void notifyClose() {
-		for(FanViewListener l : observers) {
-			l.onFanViewClose();
+		if(observers != null) {
+			for(FanViewListener l : observers) {
+				l.onFanViewClose();
+			}
 		}
 	}
 
