@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lib="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/fan_view_relative_layout" >
+
+    <LinearLayout
+        android:id="@+id/fanView"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-20dp"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"/>
+
+    <View
+        android:id="@+id/tintView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/fan_tint_view_color"
+        android:visibility="gone"/>
+
+
+    <LinearLayout
+        android:id="@+id/appView"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/fan_main_view_color"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
+
+    <View
+        android:id="@+id/dropshadow"
+        android:layout_width="@dimen/fan_horizontal_view_dropshadow_width"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@id/appView"
+        android:layout_marginLeft="@dimen/fan_horizontal_view_dropshadow_margin_left"
+        android:background="@drawable/dropshadow_horizontal"/>
+
+</RelativeLayout>

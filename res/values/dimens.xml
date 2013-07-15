@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fan View -->
+    <dimen name="fan_horizontal_view_dropshadow_width">5dp</dimen>
+    <dimen name="fan_vertical_view_dropshadow_height">5dp</dimen>
+    <dimen name="fan_horizontal_view_dropshadow_margin_left">-5dp</dimen>
+    <dimen name="fan_vertical_view_dropshadow_margin_bottom">-5dp</dimen>
+</resources>

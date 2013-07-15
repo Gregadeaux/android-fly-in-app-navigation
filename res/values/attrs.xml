@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="FanView">
-        <attr name="menuSize" format="dimension" />
+        <attr name="menuSize" format="dimension"/>
+        <attr name="fanOrientation" format="enum">
+            <enum name="horizontal" value="0"></enum>
+            <enum name="vertical" value="1"></enum>
+        </attr>
     </declare-styleable>
 </resources>

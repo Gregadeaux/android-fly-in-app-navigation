@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fan View -->
+    <color name="fan_tint_view_color">#000000</color>
+    <color name="fan_main_view_color">#000</color>
+</resources>
